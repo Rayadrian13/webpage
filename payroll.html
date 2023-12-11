@@ -82,7 +82,7 @@
         }
     </style>
 </head>
-<body onload="initcart()">
+<body>
     <h1>Payroll Calculator</h1>
 
     <p>
@@ -104,7 +104,7 @@
     <p>
         <label for="deleteLine">Delete Line Number:</label>
         <input id="deleteLine" name="deleteLine" type="number">
-        <button onclick="deleteFromPayroll()">Delete</button>
+        <button id="deleteButton" onclick="deleteFromPayroll()" style="display: none;">Delete</button>
     </p>
 
     <div id="payroll"></div>
@@ -142,6 +142,7 @@
             payroll.push(payrollItem);
 
             showPayroll();
+            updateDeleteButtonVisibility();
         }
 
         function confirmDelete() {
@@ -152,6 +153,7 @@
 
             // Hide the dialog after deletion
             hideConfirmDialog();
+            updateDeleteButtonVisibility();
         }
 
         function cancelDelete() {
@@ -170,8 +172,12 @@
         function deleteFromPayroll() {
             var toDelete = parseInt(document.getElementById("deleteLine").value);
 
-            // Show the confirmation dialog
-            showConfirmDialog();
+            if (!isNaN(toDelete) && toDelete > 0 && toDelete <= payroll.length) {
+                // Show the confirmation dialog
+                showConfirmDialog();
+            } else {
+                alert("Invalid line number to delete.");
+            }
         }
 
         function showPayroll() {
@@ -190,6 +196,17 @@
         }
 
         var payroll = [];
+
+        function updateDeleteButtonVisibility() {
+            var deleteButton = document.getElementById("deleteButton");
+            if (payroll.length > 0) {
+                deleteButton.style.display = "inline-block";
+            } else {
+                deleteButton.style.display = "none";
+            }
+        }
+
+        updateDeleteButtonVisibility(); // Call initially to set the visibility
     </script>
 </body>
 </html>

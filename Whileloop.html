@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nth Factorial, Sum and Average</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="number"] {
+            padding: 5px;
+            margin-bottom: 10px;
+            width: 150px;
+        }
+
+        button {
+            padding: 8px 20px;
+            margin-right: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #results {
+            margin-top: 20px;
+        }
+
+        h3 {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Nth Factorial, Sum and Average</h1>
+<br>
+
+<p>
+    <label for="nValue">Enter a number (n):</label>
+    <input id="nValue" type="number">
+    <br><br>
+    <button onclick="calculateOperations()">Calculate Operations</button>
+    <button onclick="clearResults()">Clear</button>
+    <br><a href="index.html">Back to homepage</a>
+</p>
+
+<div id="results">
+    <h3 id="sumResult"></h3>
+    <h3 id="averageResult"></h3>
+    <h3 id="factorialResult"></h3>
+</div>
+
+<script>
+function calculateOperations() {
+    var n = parseInt(document.getElementById("nValue").value);
+    var factorial = 1;
+    var sum = 0;
+
+    // Calculates the nth factorial and lists all the numbers
+    var factorialList = "The first " + n + " natural numbers are: ";
+    for (var i = 1; i <= n; i++) {
+        factorial *= i;
+        factorialList += i + (i < n ? ", " : "");
+    }
+
+    // Calculates the sum of the first n numbers using a Do While Loop
+    var j = 1;
+    do {
+        sum += j;
+        j++;
+    } while (j <= n);
+
+    // Calculates the average of the first n numbers using a For Loop
+    var average = 0;
+    for (var k = 1; k <= n; k++) {
+        average += k;
+    }
+    average /= n; // Corrected average calculation by dividing by 'n' not sum of numbers
+
+    // Displays the results
+    document.getElementById("sumResult").innerHTML = "Sum of the first " + n + " numbers is: " + sum;
+    document.getElementById("averageResult").innerHTML = "Average of the first " + n + " numbers is: " + average.toFixed(2);
+    document.getElementById("factorialResult").innerHTML = factorialList;
+}
+
+function clearResults() {
+    document.getElementById("sumResult").innerHTML = '';
+    document.getElementById("averageResult").innerHTML = '';
+    document.getElementById("factorialResult").innerHTML = '';
+    document.getElementById("nValue").value = '';
+}
+</script>
+
+</body>
+</html>

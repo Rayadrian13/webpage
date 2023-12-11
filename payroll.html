@@ -39,6 +39,8 @@
 
         #payroll {
             margin-top: 20px;
+            margin: 0 auto; /* Center the table */
+            width: 80%; /* Adjust width as needed */
         }
 
         table {
@@ -104,18 +106,18 @@
     <p>
         <label for="deleteLine">Delete Line Number:</label>
         <input id="deleteLine" name="deleteLine" type="number">
-        <button id="deleteButton" onclick="deleteFromPayroll()" style="display: none; padding: 8px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">Delete</button>
+        <button id="deleteButton" onclick="showDeleteDialog()">Delete</button>
     </p>
 
     <div id="payroll"></div>
 
     <!-- The Confirm Delete dialog modal -->
-    <div id="confirmDialog" style="display: none;">
-        <div id="dialogBox" style="background-color: white; padding: 20px; border-radius: 5px; text-align: center;">
+    <div id="confirmDialog">
+        <div id="dialogBox">
             <p>Are you sure you want to delete this item?</p>
             <div id="dialogButtons">
-                <button onclick="confirmDelete()" style="padding: 8px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">Yes</button>
-                <button onclick="cancelDelete()" style="padding: 8px 20px; background-color: #f44336; color: white; border: none; cursor: pointer;">Cancel</button>
+                <button onclick="confirmDelete()">Yes</button>
+                <button onclick="hideDeleteDialog()">Cancel</button>
             </div>
         </div>
     </div>
@@ -124,23 +126,25 @@
         function addtoPayroll() {
             // Your code to add to payroll
             updateDeleteButtonVisibility();
+            showPayroll();
         }
 
         function confirmDelete() {
             // Your code for confirming deletion
-            updateDeleteButtonVisibility();
+            deleteFromPayroll();
+            hideDeleteDialog();
         }
 
         function cancelDelete() {
             // Your code for canceling deletion
-            hideConfirmDialog();
+            hideDeleteDialog();
         }
 
-        function showConfirmDialog() {
+        function showDeleteDialog() {
             document.getElementById("confirmDialog").style.display = "flex";
         }
 
-        function hideConfirmDialog() {
+        function hideDeleteDialog() {
             document.getElementById("confirmDialog").style.display = "none";
         }
 
@@ -148,8 +152,9 @@
             var toDelete = parseInt(document.getElementById("deleteLine").value);
 
             if (!isNaN(toDelete) && toDelete > 0 && toDelete <= payroll.length) {
-                // Show the confirmation dialog
-                showConfirmDialog();
+                payroll.splice(toDelete - 1, 1);
+                updateDeleteButtonVisibility();
+                showPayroll();
             } else {
                 alert("Invalid line number to delete.");
             }
@@ -157,6 +162,18 @@
 
         function showPayroll() {
             // Your code to display the payroll table
+            var tableHeader = "<thead><tr><th>No.</th><th>Employee Name</th><th>Days Worked</th><th>Daily Rate</th><th>Gross Pay</th><th>Deduction Amount</th><th>Net Pay</th></tr></thead>";
+            var tableBody = "<tbody>";
+
+            for (var i = 0; i < payroll.length; i++) {
+                var lineNumber = i + 1;
+                tableBody += "<tr><td>" + lineNumber + "</td><td>" + payroll[i].empName + "</td><td>" + payroll[i].daysWorked + "</td><td>" + payroll[i].dailyRate + "</td><td>" + payroll[i].grossPay + "</td><td>" + payroll[i].deductionAmount + "</td><td>" + payroll[i].netPay + "</td></tr>";
+            }
+
+            tableBody += "</tbody>";
+
+            var payrollTable = "<table>" + tableHeader + tableBody + "</table>";
+            document.getElementById("payroll").innerHTML = payrollTable;
         }
 
         var payroll = [];

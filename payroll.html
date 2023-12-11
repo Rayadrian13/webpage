@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            padding: 5px;
+            margin-bottom: 10px;
+            width: 150px;
+        }
+
+        button {
+            padding: 8px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #payroll {
+            margin-top: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #confirmDialog {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.4);
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #dialogBox {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        #dialogButtons {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body onload="initcart()">
+    <h1>Payroll Calculator</h1>
+
+    <p>
+        <label for="empName">Employee Name:</label>
+        <input id="empName" name="empName" type="text">
+        
+        <label for="daysWorked">Days Worked:</label>
+        <input id="daysWorked" name="daysWorked" type="number">
+        
+        <label for="dailyRate">Daily Rate:</label>
+        <input id="dailyRate" name="dailyRate" type="number">
+        
+        <label for="deductionAmount">Deduction Amount:</label>
+        <input id="deductionAmount" name="deductionAmount" type="number">
+    </p>
+
+    <button onclick="addtoPayroll()">Add to Payroll</button>
+
+    <p>
+        <label for="deleteLine">Delete Line Number:</label>
+        <input id="deleteLine" name="deleteLine" type="number">
+        <button onclick="deleteFromPayroll()">Delete</button>
+    </p>
+
+    <div id="payroll"></div>
+
+    <!-- The Confirm Delete dialog modal -->
+    <div id="confirmDialog">
+        <div id="dialogBox">
+            <p>Are you sure you want to delete this item?</p>
+            <div id="dialogButtons">
+                <button onclick="confirmDelete()">Yes</button>
+                <button onclick="cancelDelete()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addtoPayroll() {
+            var payrollItem = {
+                "empName": "",
+                "daysWorked": 0,
+                "dailyRate": 0,
+                "deductionAmount": 0,
+                "grossPay": 0,
+                "netPay": 0
+            }
+
+            payrollItem.empName = document.getElementById("empName").value;
+            payrollItem.daysWorked = parseInt(document.getElementById("daysWorked").value);
+            payrollItem.dailyRate = parseFloat(document.getElementById("dailyRate").value);
+            payrollItem.deductionAmount = parseFloat(document.getElementById("deductionAmount").value);
+
+            payrollItem.grossPay = payrollItem.daysWorked * payrollItem.dailyRate;
+            payrollItem.netPay = payrollItem.grossPay - payrollItem.deductionAmount;
+
+            payroll.push(payrollItem);
+
+            showPayroll();
+        }
+
+        function confirmDelete() {
+            var toDelete = parseInt(document.getElementById("deleteLine").value);
+
+            payroll.splice(toDelete - 1, 1);
+            showPayroll();
+
+            // Hide the dialog after deletion
+            hideConfirmDialog();
+        }
+
+        function cancelDelete() {
+            // Hide the dialog if Cancel is clicked
+            hideConfirmDialog();
+        }
+
+        function showConfirmDialog() {
+            document.getElementById("confirmDialog").style.display = "flex";
+        }
+
+        function hideConfirmDialog() {
+            document.getElementById("confirmDialog").style.display = "none";
+        }
+
+        function deleteFromPayroll() {
+            var toDelete = parseInt(document.getElementById("deleteLine").value);
+
+            // Show the confirmation dialog
+            showConfirmDialog();
+        }
+
+        function showPayroll() {
+            var tableHeader = "<thead><tr><th>No.</th><th>Employee Name</th><th>Days Worked</th><th>Daily Rate</th><th>Gross Pay</th><th>Deduction Amount</th><th>Net Pay</th></tr></thead>";
+            var tableBody = "<tbody>";
+
+            for (var i = 0; i < payroll.length; i++) {
+                var lineNumber = i + 1;
+                tableBody += "<tr><td>" + lineNumber + "</td><td>" + payroll[i].empName + "</td><td>" + payroll[i].daysWorked + "</td><td>" + payroll[i].dailyRate + "</td><td>" + payroll[i].grossPay + "</td><td>" + payroll[i].deductionAmount + "</td><td>" + payroll[i].netPay + "</td></tr>";
+            }
+
+            tableBody += "</tbody>";
+
+            var payrollTable = "<table>" + tableHeader + tableBody + "</table>";
+            document.getElementById("payroll").innerHTML = payrollTable;
+        }
+
+        var payroll = [];
+    </script>
+</body>
+</html>

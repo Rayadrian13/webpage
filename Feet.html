@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Length Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            padding: 5px;
+            margin-bottom: 10px;
+            width: 200px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            display: block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>This page converts Meters to Feet</h1>
+    <br><br>
+    <label for="Feet">Convert Meters</label>
+    <input id="Feet" type="number">
+    <button onclick="convertFeet()">Convert</button>
+    <button onclick="clearValues()">Clear Values</button>
+    <br>
+    <label for="Meters">The Meters is</label>
+    <input id="Meters" type="number" readonly> 
+    <br>
+    <a href="index.html">Back to homepage</a>
+
+    <script>
+        function convertFeet() {
+            var Feet = parseFloat(document.getElementById("Feet").value);
+            var Meters = Feet * 0.3048;
+            document.getElementById("Meters").value = Meters.toFixed(2); 
+        }
+
+        function clearValues() {
+            document.getElementById("Feet").value = '';
+            document.getElementById("Meters").value = '';
+        }
+    </script>
+</body>
+</html>
